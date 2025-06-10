@@ -1,0 +1,536 @@
+SECTION 1.  Iterative Prompt Engineering
+
+You’re designing a CLI Task Manager that allows users to add, list, and remove tasks stored in memory.
+
+Course Constraint Reminder
+Your pseudocode must reflect only techniques taught through to Week 10:
+
+Basic lists and dictionaries for data storage
+Simple functions with parameters
+Basic file operations (if needed for persistence)
+While loops for menu systems
+Try/except for basic error handling only
+
+1.1 Initial Prompt & Pseudocode (8 marks)
+
+ME>> SECTION 1.1 : INITIAL PROMPT
+	
+I need to create a simple command-line Task Manager in Python using only basic techniques from an introductory programming course.
+The program should allow users to:
+
+Add a task
+
+List all tasks
+
+Allow users to add new tasks
+
+Remove a task
+
+Exit the program when the user chooses
+
+The pseudocode should include only topics to covered in the course such as basic lists and operations, inputs, display information (print)  data types, functions and methods, dictionaries for data storage. Follow a structured planning approach with clear steps.
+
+>> AI RESPONSE: 
+
+PROBLEM STATEMENT:
+Build a CLI task manager where users can add, list, and remove tasks.
+
+INPUTS/OUTPUTS:
+- Inputs: user’s menu choice, task description, task index
+- Outputs: confirmation messages, task list display
+
+PSEUDOCODE:
+
+FUNCTION display_menu():
+    DISPLAY "1. Add Task"
+    DISPLAY "2. View Tasks"
+    DISPLAY "3. Remove Task"
+    DISPLAY "4. Exit"
+
+FUNCTION add_task(task_list):
+    PROMPT user for task description
+    APPEND task to task_list
+
+FUNCTION view_tasks(task_list):
+    IF task_list is empty:
+        DISPLAY "No tasks found"
+    ELSE:
+        FOR index, task in task_list:
+            DISPLAY index and task
+
+FUNCTION remove_task(task_list):
+    CALL view_tasks(task_list)
+    PROMPT user for index
+    TRY:
+        CONVERT input to integer
+        REMOVE task at index
+        DISPLAY "Task removed"
+    EXCEPT error:
+        DISPLAY "Invalid index"
+
+MAIN PROGRAM:
+    CREATE empty task_list
+    WHILE True:
+        CALL display_menu()
+        PROMPT user for option
+        IF option == 1:
+            CALL add_task(task_list)
+        ELIF option == 2:
+            CALL view_tasks(task_list)
+        ELIF option == 3:
+            CALL remove_task(task_list)
+        ELIF option == 4:
+            DISPLAY "Exiting program"
+            BREAK
+        ELSE:
+            DISPLAY "Invalid choice"
+
+	
+ME>> COURSE CONSTRAINT CHECK:
+
+Should the output includes error messages? INPUTS/OUTPUTS:
+- Inputs: user’s menu choice, task description, task index
+- Outputs: confirmation messages, task list display
+
+>> AI RESPONSE
+
+Yes — great observation! 👌 It should include error messages under Outputs, especially since the pseudocode handles invalid input (e.g., wrong index, non-integer entry). Including this makes your design complete and realistic
+
+Here’s the corrected version:
+
+✅ INPUTS / OUTPUTS (updated)
+vbnet
+Copy
+Edit
+INPUTS:
+- User’s menu choice (integer)
+- Task description (string)
+- Task index to remove (integer)
+
+OUTPUTS:
+- Confirmation messages (e.g., "Task added", "Task removed")
+- Task list display (indexed)
+- Error messages for invalid input (e.g., "Invalid choice", "Invalid index")
+
+
+COURSE REFERENCE
+
+I used the 6-step planning method from Week 2: Simply Methodology – Computational Thinking to structure my approach.
+
+The menu logic, if/elif conditions, and user options are based on Week 3: Creating Menu, Logical Operators, and Conditionals.
+
+The use of print() and input() comes directly from Week 3: Print & Input.
+
+The program uses functions and parameters following Week 4: Functions & Returning Values, Syntax of a Function.
+
+The while loop and list operations come from Week 5: Lists, Loops, and Slicing.
+
+Finally, the try/except error handling in remove_task() is based on Week 11: Files & Exceptions, where we learned how to prevent crashes with validation logic.
+
+SECTION 1.2: TWO PROMPT REFINEMENTS (12 marks)
+
+ME>> REFINE PROMPT 1. 
+
+Please refine the pseudocode for the command-line Task Manager to improve its reliability. Add error handling when the user:
+
+Enters non-integer input for the menu
+
+Enters an invalid task index
+
+Use only basic try/except, if conditions, and loops. Also, make the output more user-friendly with helpful error messages.
+
+AI>> AI RESPONSE
+
+FUNCTION display_menu():
+    DISPLAY menu options
+
+FUNCTION get_menu_choice():
+    WHILE True:
+        TRY:
+            PROMPT user for input
+            CONVERT to integer
+            RETURN choice
+        EXCEPT ValueError:
+            DISPLAY "Please enter a valid number."
+
+FUNCTION add_task(task_list):
+    PROMPT user for task description
+    APPEND to task_list
+    DISPLAY "Task added."
+
+FUNCTION view_tasks(task_list):
+    IF task_list is empty:
+        DISPLAY "No tasks found."
+    ELSE:
+        FOR index, task in task_list:
+            DISPLAY index and task
+
+FUNCTION remove_task(task_list):
+    IF task_list is empty:
+        DISPLAY "Cannot remove tasks from an empty list."
+        RETURN
+    CALL view_tasks(task_list)
+    PROMPT user for index to remove
+    TRY:
+        CONVERT to integer
+        IF index < 0 OR index >= LENGTH of task_list:
+            DISPLAY "Index out of range."
+        ELSE:
+            REMOVE task at index
+            DISPLAY "Task removed."
+    EXCEPT ValueError:
+        DISPLAY "Please enter a valid number."
+
+MAIN PROGRAM:
+    CREATE empty task_list
+    WHILE True:
+        CALL display_menu()
+        SET choice = get_menu_choice()
+        IF choice == 1:
+            CALL add_task(task_list)
+        ELIF choice == 2:
+            CALL view_tasks(task_list)
+        ELIF choice == 3:
+            CALL remove_task(task_list)
+        ELIF choice == 4:
+            DISPLAY "Exiting..."
+            BREAK
+        ELSE:
+            DISPLAY "Invalid option. Choose 1–4."
+
+COURSE REFERENCE
+
+This refinement applied error handling and validation logic from Week 11: Files & Exceptions, where we learned to use try/except blocks to prevent crashes.
+It also builds on Week 3: Logical Operators & Conditionals and Print/Input for user feedback, and uses Week 5: Loops to allow repeated input attempts. Also, The program uses functions and parameters following Week 4: Functions & Returning Values, Syntax of a Function.
+
+
+ME>> REFINAMENT PROMPT 2.
+
+Please refine the pseudocode for the Task Manager again. To enhance user experience, could you please refine the code confirming task removal before deletion?.
+The program should:
+
+Show the selected task
+
+Ask the user: “Are you sure you want to delete this task? (yes/no)”
+
+Only delete if the user enters “yes” (case-insensitive)
+
+ME>> COURSE CONSTRAINT CHECK:
+
+Use only basic string handling, input, conditionals, functions, loops.
+
+AI>> AI RESPONSE
+
+Absolutely! That's a great enhancement — adding a confirmation step before deleting a task improves usability and prevents accidental deletions. 
+
+FUNCTION display_menu():
+    DISPLAY menu options
+
+FUNCTION get_menu_choice():
+    WHILE True:
+        TRY:
+            PROMPT user for menu choice
+            CONVERT to integer
+            RETURN choice
+        EXCEPT ValueError:
+            DISPLAY "Please enter a valid number."
+
+FUNCTION add_task(task_list):
+    PROMPT user for task description
+    APPEND to task_list
+    DISPLAY "Task added."
+
+FUNCTION view_tasks(task_list):
+    IF task_list is empty:
+        DISPLAY "No tasks found."
+    ELSE:
+        FOR index, task in task_list:
+            DISPLAY index and task
+
+FUNCTION remove_task(task_list):
+    IF task_list is empty:
+        DISPLAY "Cannot remove tasks from an empty list."
+        RETURN
+    CALL view_tasks(task_list)
+    PROMPT user for index to remove
+    TRY:
+        CONVERT input to integer
+        IF index < 0 OR index >= LENGTH of task_list:
+            DISPLAY "Index out of range."
+        ELSE:
+            DISPLAY "Selected task: " + task_list[index]
+            PROMPT "Are you sure you want to delete this task? (yes/no)"
+            GET confirmation
+            IF confirmation.lower() == "yes":
+                REMOVE task at index
+                DISPLAY "Task removed."
+            ELSE:
+                DISPLAY "Task not removed."
+    EXCEPT ValueError:
+        DISPLAY "Invalid input. Please enter a number."
+
+MAIN PROGRAM:
+    CREATE empty task_list
+    WHILE True:
+        CALL display_menu()
+        SET choice = get_menu_choice()
+        IF choice == 1:
+            CALL add_task(task_list)
+        ELIF choice == 2:
+            CALL view_tasks(task_list)
+        ELIF choice == 3:
+            CALL remove_task(task_list)
+        ELIF choice == 4:
+            DISPLAY "Goodbye!"
+            BREAK
+        ELSE:
+            DISPLAY "Invalid option. Please choose 1–4."
+
+COURSE REFERENCE:
+
+This refinement applied error handling and validation logic from Week 11: Files & Exceptions, where we learned to use try/except blocks to prevent crashes.
+It also builds on Week 3: Logical Operators & Conditionals and Print/Input for user feedback, and uses Week 5: Loops to allow repeated input attempts. Also, The program uses functions and parameters following Week 4: Functions & Returning Values, Syntax of a Function.
+
+SECTION 1.3 CRITICAL ANALYSIS 
+
+My initial prompt focused on creating a basic Task Manager using fundamental programming concepts. It applied the structured planning method from Week 2: Computational Thinking, which helped define the problem, inputs/outputs, and key functions.
+
+In the first refinement, I introduced try/except error handling, following the techniques from Week 11: Files & Exceptions, to ensure the program handled invalid inputs safely. I also incorporated print() and input() from Week 3, and used .append() and list operations from Week 5. The use of functions throughout was based on Week 4: Functions & Syntax.
+
+In the second refinement, I enhanced the user experience by adding a confirmation step before task deletion, applying input validation and conditionals from Week 3.
+
+These refinements transformed a simple menu program into a safer and more user-friendly tool, while closely aligning with key skills developed across Weeks 2–5 and Week 1
+
+
+SECTION 2: Debug & Correct Practice (25 marks)
+
+Section 2.1 BEFORE USING AI.
+
+>>ME>> Manual Error Observations (Before using AI)
+After I did my own revision I found:
+
+Typo Error (Line 8): if index < len(tas):
+'tas' is undefined. It should be 'tasks'.
+
+Variable Name Error (Line 14): for i, t in enumerate(task):
+ 'task' is undefined. The list is called 'tasks'.
+
+Function Call Error (Line 20): list_task()
+Function is defined as list_tasks() with an s.
+
+SECTION 2.1 
+
+TASK 1. Prompt your AI to identify errors in this code
+
+ME>> Initial prompt
+
+Please analyze this buggy Task Manager code and identify errors involving variable names, logic, loops, functions, outputs and others. 
+
+TASK 2.  AI’s Complete Error Analysis:
+markdown
+Here are the errors in the given code:
+
+1. TYPO ERROR (Line 8):
+   - Uses `len(tas)` but the list is named `tasks`.
+   - This will raise a NameError.
+
+2. VARIABLE NAME ERROR (Line 14):
+   - Uses `enumerate(task)` but the correct variable is `tasks`.
+   - Will raise a NameError.
+
+3. FUNCTION NAME ERROR (Line 20):
+   - Calls `list_task()` but function is defined as `list_tasks()`.
+   - Will raise a NameError.
+
+4. DESIGN NOTE:
+   - There's no error handling if `remove_task` is called with a negative index.
+   - Could be improved with a condition `if 0 <= index < len(tasks)`.
+
+TASK 3. COURSE REFERENCE 
+
+I applied the debugging and collaborative analysis approach from Week 12: Testing and Debugging, which emphasized identifying variable and logic errors through systematic review and validating findings with AI assistance.
+
+2.2 FIX AND MANUAL REWRITE  (15 marks)
+
+TASK 1. Prompt your AI to provide corrected code
+
+Please provide a corrected version of the buggy Task Manager code below. Fix all issues related to variable names, typos, and incorrect function calls. The code should use only basic Python techniques from the course such as lists, input/output, functions, prints
+Make sure the task listing, adding, and removing work correctly.
+
+TASK 2. Quote your prompt and AI’s response
+
+AI>>Corrected Code Response:
+
+tasks = []
+
+def add_task(task):
+    tasks.append(task)
+    print(f"Added: {task}")
+
+def remove_task(index):
+    if 0 <= index < len(tasks):  # Fixed: typo 'tas' corrected to 'tasks', added 0 <= index
+        removed = tasks[index]
+        del tasks[index]
+        print(f"Removed: {removed}")
+    else:
+        print("Invalid index!")
+
+def list_tasks():
+    if not tasks:
+        print("No tasks available.")
+    else:
+        for i, t in enumerate(tasks):  # Fixed: 'task' → 'tasks'
+            print(f"{i+1}: {t}")
+
+def main():
+    add_task("Buy milk")
+    add_task("Pay bills")
+    add_task("Walk dog")
+    list_tasks()
+    remove_task(1)
+    list_tasks()  # Fixed: corrected function name from list_task()
+
+if __name__ == "__main__":
+    main()
+
+
+SECTION 2.2 TASK 3. ME>> Does the code has doctest for every function?
+
+SECTION 2.2 TASK 3. AI>> Yes — every core function has a valid doctest that:
+
+Clears the list (for isolation),
+
+Adds or removes tasks,
+
+Produces visible output for testing.
+
+| Function Name   | Doctest Present? | Notes                                                                  |
+| --------------- | ---------------- | ---------------------------------------------------------------------- |
+| `add_task()`    | ✅ Yes            | Tests adding a task and checking the last item in the list             |
+| `remove_task()` | ✅ Yes            | Tests adding a task first, then removing it, and printing confirmation |
+| `list_tasks()`  | ✅ Yes            | Tests display after adding a task (also shows visual output)           |
+| `main()`        | 🚫 No            | No doctest — but this is expected (main logic is typically not tested) |
+
+
+TASK 3. Manually rewrite the entire corrected script in a new Colab cell
+
+TASK 4. Add doctest examples for each function
+
+TASK 5. Include comments explaining your fixes
+
+
+SECTION 3.  Debug & Refine WeatherWise API (20 marks)
+
+Please review the following beginner-level weather function. Identify at least 3 issues and suggest improvements using only error handling techniques taught in an introductory Python course (e.g. try/except, input checks, simple messages).
+Avoid advanced techniques like custom exception types or logging modules.
+
+SECTION 3.1  Issue Analysis with Course Connection (6 marks)
+
+ME>> INITIAL PROMPT 
+
+Please review the following beginner-level weather function. Identify at least 3 issues and suggest improvements using only error handling techniques taught in an introductory Python course (e.g. try/except, input checks, simple messages).
+Avoid advanced techniques like custom exception types or logging modules.
+
+AI>> RESPONSE
+
+Let’s begin with Step 3.1: Issue Analysis with Course Connection.
+
+🔹 3.1 Issue Analysis with Course Connection (6 marks)
+🛠️ Task:
+List 3 problems in the original safe_weather_data_fetch() function
+
+For each, reference the specific week/topic that addresses it
+
+Then, include your AI prompt for review
+
+✅ Three Problems & Week References:
+🔴 Problem 1: No Input Validation
+
+The function does not check if city is empty before making a request.
+
+Solution Concept: Week 6 – User Input Validation
+
+🔴 Problem 2: Catch-all except with no feedback
+
+The outer except block just returns "Error occurred" without explaining what failed.
+
+Solution Concept: Week 8 – Basic Try/Except with Print-Based Feedback
+
+🔴 Problem 3: No nested error handling
+
+If data['current_condition'] is missing or malformed, it crashes silently.
+
+Solution Concept: Week 8 – Safe Data Extraction with Try/Except Nesting
+
+
+SECTION 3.1  Issue Analysis with Course Connection (6 marks)
+
+TASK 3. Prompt AI: “Review this function using only error handling techniques taught in an introductory programming course (basic try/except only).”
+
+AI > RESPONSE 
+
+Here are three issues with the current `safe_weather_data_fetch()` function:
+
+1. ❌ No Input Validation:
+   - The function does not check if the input `city` is an empty string.
+   - This could lead to a failed or meaningless API call.
+   ✅ Fix: Use `if not city:` to catch empty input.
+   ✅ Course Link: Week 3 – Decisions and input validation.
+
+2. ❌ Generic except with no message:
+   - The function uses a catch-all `except` that silently fails with "Error occurred".
+   - This makes it hard for users to understand what went wrong.
+   ✅ Fix: Add a `print()` statement to describe the issue.
+   ✅ Course Link: Week 8 – Basic error handling for APIs.
+
+3. ❌ No nested error check for missing/malformed data:
+   - Assumes that all keys and indexes exist in the response JSON.
+   - If the structure is invalid, it will raise a runtime error.
+   ✅ Fix: Add a nested `try/except` inside the outer block.
+   ✅ Course Link: Week 8 – Working with unpredictable API responses.
+
+
+SECTION 3.3 Comparison Analysis (4 marks)
+Compare your refined version with the provided ideal version:
+
+ME>> PROMPT 
+
+Please compare my version of the refined_safe_weather_data_fetch(city) function with the provided “ideal” version.
+Identify:
+
+Two similarities in approach
+
+Two differences in how complexity is handled
+
+One Week 8 concept that my version demonstrates well
+
+One area I could improve based on the concepts in Textbook Chapter 6
+
+SECTION 3.3
+
+✅ 1. Two Similarities
+Input validation:
+ Both versions check whether the city value is empty using if not city: before proceeding — a foundational input check taught in Week 3 and reinforced in Week 8.
+
+Basic error handling:
+ Both versions use try/except blocks without specifying exception types, as recommended in Week 8, and return None or a dictionary based on outcome.
+
+✅ 2. Two Differences
+Error messaging style:
+ My version prints plain error messages directly. The ideal version separates messages more clearly with custom descriptions for each failure point. Mine is simpler and more compact.
+
+Structure & readability:
+ The ideal version is more readable with slightly clearer nested structure and variable naming (current = data['current_condition'][0]). My version is functionally correct but could benefit from spacing and comments for readability.
+
+✅ 3. Course Concept Demonstrated Best
+Basic input validation with fallback logic (Week 8)
+My version clearly shows how to combine input checking, error feedback, and basic response handling from an external API using try/except blocks and conditionals.
+
+✅ 4. Improvement Area (from Chapter 6)
+Refactor repetition and improve user messaging
+After reviewing Chapter 6, I would improve my function by:
+
+Creating a small helper function for error messages to reduce repetition
+
+Making messages more descriptive (e.g. "Connection timeout" or "Invalid API response")
+
